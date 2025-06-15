@@ -11,6 +11,7 @@ from .libvio import *
 from .onelist import *
 from .smdyy import *
 from .sp360 import *
+from .vodjp import *
 from .voflix import *
 from .yhdm import *
 from .yiso import *

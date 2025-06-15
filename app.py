@@ -15,23 +15,11 @@ Compress(app)
 
 
 site_list = [
-    "bdys01",
-    "bdys_old",
     "bttwoo",
-    "cokemv",
-    "czspp",
     "ddys",
-    "dy555",
-    "gitcafe",
-    "lezhutv",
     "libvio",
-    "onelist",
-    "smdyy",
     "sp360",
-    "voflix",
-    "yhdm",
-    "yiso",
-    "zhaoziyuan"
+    "vodjp",
 ]
 
 with open('./json/douban.json', "r", encoding="utf-8") as f:

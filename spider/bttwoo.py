@@ -6,6 +6,7 @@ import re
 import base64
 from Crypto.Cipher import AES
 import urllib3
+import zlib
 
 
 urllib3.util.timeout.Timeout._validate_timeout = lambda *args: 5 if args[2] != 'total' else None
@@ -57,7 +58,7 @@ def get_item(item, tag):
 
 def searchContent(key, token):
     try:
-        url = siteUrl + "/xssearch?q=" + quote_plus(key)
+        url = siteUrl + "/xssssearch?q=" + quote_plus(key)
         jS = BeautifulSoup(requests.get(url=url, headers=getHeaders()).text, "html.parser")
         videos = []
         lists = jS.select("div.mi_ne_kd > ul > li")
@@ -150,6 +151,34 @@ def playerContent(ids, flag, token):
         pY = re.compile("video: \\{url: \"([^\"]+)\"")
         m = re.compile("subtitle: \\{url:\"([^\"]+\\.vtt)\"")
         matcher = Y.search(K2)
+        svgPattern = r"const mysvg = '(.*?)';"
+        svgMatch = re.search(svgPattern, K2)
+        if svgMatch:
+            m3u8_url = "https://v14.qrssv.com/202506/06/LNK7hmR5HK19/video/index.m3u8"
+            # 发送GET请求获取M3U8文件内容
+            response = requests.get(m3u8_url)
+
+            # 检查请求是否成功
+            if response.status_code == 200:
+                m3u8_content = response.text
+                print(m3u8_content)
+                
+                # 将M3U8内容编码为Bytes
+                m3u8_bytes = m3u8_content.encode('utf-8')
+                
+                # 将Bytes编码为Base64
+                m3u8_base64 = base64.b64encode(m3u8_bytes).decode('utf-8')
+                
+                # 构造Data URI
+                data_uri = f'data:application/vnd.apple.mpegurl;base64,{m3u8_base64}'
+
+                return {
+                    "header": "",
+                    "parse": "0",
+                    "playUrl": "",
+                    "url": data_uri
+                }
+
         if matcher:
             group = matcher.group(1)
             KEY = matcher.group(2)
